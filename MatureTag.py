@@ -2,7 +2,7 @@
 # Copyright: 2014-2016 Luminous Spice <luminous.spice@gmail.com>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/copyleft/agpl.html
 #
-# Mature Tag: an Anki addon automatically adds a tag on your mature cards after the review.
+# Mature Tag: an Anki addon automatically adds a tag on your mature notes after the review.
 # GitHub: https://github.com/luminousspice/anki-addons/
 
 from anki.hooks import addHook, runHook, wrap
