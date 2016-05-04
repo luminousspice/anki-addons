@@ -13,7 +13,7 @@ Find Matures: an Anki addon adds a tag to find mature cards on the left pane of 
 
 ![mature tag in the pane](mature.png)
 
-## Mature Tag
+## [Mature Tag](https://ankiweb.net/shared/info/17741639) (Code: 17741639)
 This Add-on automatically adds a tag on your mature notes after the review.
 
 A sample code for the article: [フックを使った Anki アドオンのつくり方](http://rs.luminousspice.com/how_to_create_anki_add-ons/)
