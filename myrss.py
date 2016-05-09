@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import feedparser
 from aqt import mw
+import BeautifulSoup
+import urllib
 from aqt.qt import *
 
 URL = "http://www.merriam-webster.com/wotd/feed/rss2"
-tags = "MW"
-TITLE = "Words"
+tags = ["MW"]
+DECK = "Words"
 MODEL = "words"
 
 def buildCard():
     # MAKE DECK
-    deck  = mw.col.decks.get(mw.col.decks.id(TITLE))
+    deck  = mw.col.decks.get(mw.col.decks.id(DECK))
     model = mw.col.models.byName(MODEL)
 
     # ASSIGN MODEL TO DECK
@@ -24,20 +25,20 @@ def buildCard():
     mw.col.models.current()['did'] = deck['id']
     mw.col.models.save(model)
 
-    response = feedparser.parse(URL)
+    data = urllib.urlopen(URL)
+    doc = BeautifulSoup.BeautifulStoneSoup(data, selfClosingTags=['link'])
 
-    for entry in response.entries:
-        term['question']  = entry.summary
-        term['answer'] = entry.title
-        term['url'] = entry.link
-        card = mw.col.newNote()
-        if not term['question'] is None:
-            card['Front']   = u''.join(unicode(i) for i in term['question'])
-        if not term['answer'] is None:
-            card['Back']    = u''.join(unicode(i) for i in term['answer'])
+    for item in doc.findAll('entry'):
+        note = mw.col.newNote()
+        if not item.title is None:
+            note['Front']   = u''.join(unicode(i) for i in item.title.string)
+        if not item.summary is None:
+            note['Back']    = u''.join(unicode(i) for i in item.summary.string)
 
-        card['Note'] = u''.join(unicode(i) for i in term['url'])
-        card.tags = filter(None, tags)
+        note['id'] = u''.join(unicode(i) for i in item.link['href'])
+        note.tags = filter(None, tags)
+        if note.dupeOrEmpty():
+            continue
         mw.col.addNote(card)
 
     mw.col.reset()
