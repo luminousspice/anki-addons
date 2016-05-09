@@ -78,7 +78,7 @@ def buildCard():
         return
 
     #parse xml
-    doc = BeautifulStoneSoup(data, selfClosingTags=['link'], convertEntities=BeautifulStoneSoup.ALL_ENTITIES)
+    doc = BeautifulStoneSoup(data, selfClosingTags=['link'], convertEntities=BeautifulStoneSoup.XHTML_ENTITIES)
 
     if not doc.find('item') is None:
         items = doc.findAll('item')
@@ -95,7 +95,7 @@ def buildCard():
     log = ""
     for item in items:
         note = mw.col.newNote()
-        note[_("Front")] = item.title.string
+        note[_("Front")] = item.title.text
         nounique = note.dupeOrEmpty()
         if nounique:
             if nounique == 2:
@@ -103,10 +103,10 @@ def buildCard():
             continue
         if feed == "rss":
             if not item.description is None:
-                note[_("Back")] = item.description.string
+                note[_("Back")] = item.description.text
         if feed == "atom":
             if not item.summary is None:
-                note[_("Back")] = item.summary.string
+                note[_("Back")] = item.summary.text
         note.tags = filter(None, tags)
         mw.col.addNote(note)
         adds += 1
