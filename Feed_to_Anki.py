@@ -65,7 +65,17 @@ def buildCard():
     mw.col.models.current()['did'] = deck['id']
     mw.col.models.save(model)
 
-    data = urllib2.urlopen(URL)
+    # retrieve rss
+    try:
+        data = urllib2.urlopen(URL)
+    except urllib2.HTTPError, e:
+        errmsg = "The feed server couldn\'t fulfill the request."
+        utils.showWarning(errmsg)
+        return
+    except urllib2.URLError, e:
+        errmsg = "Failed to reach the feed server."
+        utils.showWarning(errmsg)
+        return
 
     #parse xml
     doc = BeautifulStoneSoup(data, selfClosingTags=['link'], convertEntities=BeautifulStoneSoup.ALL_ENTITIES)
