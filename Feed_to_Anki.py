@@ -20,30 +20,12 @@ from anki.stdmodels import addBasicModel
 from anki.lang import ngettext
 from BeautifulSoup import BeautifulStoneSoup
 
-# Target Deck Name
-DECK = u"Word of the Day"
-tags = [u"wotd",u"OAAD"]
-
-# Feed URL (Oxford Learner's Dictionaries - Word of the Day)
-URL = "http://feeds.feedburner.com/OAAD-WordOfTheDay?format=xml"
-
-# other WOTD Feeds
-################################################
-# Macmillan Dictionary - Word of the Day
-#URL = "http://www.macmillandictionary.com/wotd/wotdrss.xml"
-#Macmillan Dictionary - Phrase of the Week
-#URL = "http://www.macmillandictionary.com/potw/potwrss.xml"
-# Macmillan Dictionary - BuzzWord
-# URL = "http://www.macmillandictionary.com/buzzword/rss.xml"
-# Wordsmith.org: This week's words
-#URL = "http://wordsmith.org/awad/rss2.xml"
-# Wordsmith.org: Today's Word
-#URL = "http://wordsmith.org/awad/rss1.xml"
-# Dictionary.com Word of the Day
-#URL = "http://www.dictionary.com/wordoftheday/wotd.rss"
-# Merriam-Webster's Word of the Day
-#URL = "http://www.merriam-webster.com/wotd/feed/rss2"
-################################################
+# Feeds info (URL, deck, tags)
+Feeds = [
+    {"URL": "http://www.merriam-webster.com/wotd/feed/rss2", "DECK": u"Word of the Day::Merriam-Webster", "tags": [u"wotd",u"MW"]},
+    {"URL": "http://www.macmillandictionary.com/wotd/wotdrss.xml", "DECK": u"Word of the Day::Macmillan", "tags": [u"wotd",u"Macmillan"]},
+    {"URL": "http://www.oxforddictionaries.com/wordoftheday/wotdrss.xml", "DECK": u"Word of the Day::Oxford", "tags": [u"wotd",u"ODE"]},
+]
 
 MODEL = u"Feed_to_Anki"
 SCMHASH = "5d7044a40342c678a55835f6c456deead837000a"
@@ -57,9 +39,17 @@ def sslwrap(func):
 
 ssl.wrap_socket = sslwrap(ssl.wrap_socket)
 
-def buildCard():
+# iterate decks
+def buildCards():
+    msg = ""
+    for i in range(len(Feeds)):
+        msg += Feeds[i]["DECK"] + ": "
+        msg += buildCard(**Feeds[i])
+    utils.showText(msg)
+
+def buildCard(**kw):
     # get deck and model
-    deck  = mw.col.decks.get(mw.col.decks.id(DECK))
+    deck  = mw.col.decks.get(mw.col.decks.id(kw['DECK']))
     model = mw.col.models.byName(MODEL)
     
     # if MODEL doesn't exist, use built-in Basic Model
@@ -85,7 +75,7 @@ def buildCard():
     # retrieve rss
     try:
         h = httplib2.Http(".cache")
-        (resp, data) = h.request(URL, "GET")
+        (resp, data) = h.request(kw['URL'], "GET")
     except httplib2.ServerNotFoundError, e:
         errmsg = u"Failed to reach the feed server."
         utils.showWarning(errmsg + str(e))
@@ -132,7 +122,7 @@ def buildCard():
                 note[_("Back")] = item.content.text
             elif not item.summary is None:
                 note[_("Back")] = item.summary.text
-        note.tags = filter(None, tags)
+        note.tags = filter(None, kw['tags'])
         mw.col.addNote(note)
         adds += 1
 
@@ -145,9 +135,9 @@ def buildCard():
     if len(log) > 0:
         msg += _("duplicate") + ":\n"
         msg += log
-    utils.showText(msg)
+    return msg
 
 # create a new menu item
 action = QAction("Feed to Anki", mw)
-mw.connect(action, SIGNAL("triggered()"), buildCard)
+mw.connect(action, SIGNAL("triggered()"), buildCards)
 mw.form.menuTools.addAction(action)
