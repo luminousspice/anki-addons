@@ -3,9 +3,13 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/copyleft/agpl.html
 #
 # Feed to Anki: an Anki addon makes a RSS (or Atom) Feed into Anki cards.
+# Version: 0.2.1
 # GitHub: https://github.com/luminousspice/anki-addons/
 
-import urllib2
+import ssl
+from functools import wraps
+import feed_to_anki.httplib2 as httplib2
+
 from aqt import mw, utils
 from aqt.qt import *
 from anki.stdmodels import addBasicModel
@@ -40,6 +44,15 @@ URL = "http://feeds.feedburner.com/OAAD-WordOfTheDay?format=xml"
 MODEL = u"Feed_to_Anki"
 SCMHASH = "5d7044a40342c678a55835f6c456deead837000a"
 
+def sslwrap(func):
+    @wraps(func)
+    def bar(*args, **kw):
+        kw['ssl_version'] = ssl.PROTOCOL_TLSv1
+        return func(*args, **kw)
+    return bar
+
+ssl.wrap_socket = sslwrap(ssl.wrap_socket)
+
 def buildCard():
     # get deck and model
     deck  = mw.col.decks.get(mw.col.decks.id(DECK))
@@ -67,15 +80,21 @@ def buildCard():
 
     # retrieve rss
     try:
-        data = urllib2.urlopen(URL)
-    except urllib2.HTTPError, e:
-        errmsg = "The feed server couldn\'t fulfill the request."
-        utils.showWarning(errmsg)
+        h = httplib2.Http(".cache")
+        (resp, data) = h.request(URL, "GET")
+    except httplib2.ServerNotFoundError, e:
+        errmsg = u"Failed to reach the feed server."
+        utils.showWarning(errmsg + str(e))
         return
-    except urllib2.URLError, e:
-        errmsg = "Failed to reach the feed server."
-        utils.showWarning(errmsg)
+    except httplib2.HttpLib2Error, e:
+        errmsg = u"The feed server couldn\'t fulfill the request."
+        utils.showWarning(errmsg + str(e))
         return
+    else:
+        if not str(resp.status) in ("200","304"):
+            errmsg = "The feed server couldn\'t return the file."
+            utils.showWarning(errmsg + u"Code: " +str(resp.status))
+            return
 
     #parse xml
     doc = BeautifulStoneSoup(data, selfClosingTags=['link'], convertEntities=BeautifulStoneSoup.XHTML_ENTITIES)
