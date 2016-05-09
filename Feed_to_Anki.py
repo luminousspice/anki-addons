@@ -50,8 +50,8 @@ ssl.wrap_socket = sslwrap(ssl.wrap_socket)
 def buildCards():
     msg = ""
     for i in range(len(Feeds)):
-        msg += Feeds[i]["DECK"] + ": "
-        msg += buildCard(**Feeds[i])
+        msg += Feeds[i]["DECK"] + ":\n"
+        msg += buildCard(**Feeds[i]) + "\n"
     utils.showText(msg)
 
 def buildCard(**kw):
@@ -80,22 +80,25 @@ def buildCard(**kw):
     mw.col.models.save(model)
 
     # retrieve rss
+    mw.progress.start(immediate=True)
     try:
         h = httplib2.Http(".cache")
         (resp, data) = h.request(kw['URL'], "GET")
     except httplib2.ServerNotFoundError, e:
-        errmsg = u"Failed to reach the feed server."
-        utils.showWarning(errmsg + str(e))
-        return
+        errmsg = u"Failed to reach the feed server." + str(e) + "\n"
+        utils.tooltip(errmsg)
+        return errmsg
     except httplib2.HttpLib2Error, e:
-        errmsg = u"The feed server couldn\'t fulfill the request."
-        utils.showWarning(errmsg + str(e))
-        return
+        errmsg = u"The feed server couldn\'t fulfill the request." + str(e) + "\n"
+        utils.tooltip(errmsg)
+        return errmsg
     else:
         if not str(resp.status) in ("200","304"):
-            errmsg = "The feed server couldn\'t return the file."
-            utils.showWarning(errmsg + u"Code: " +str(resp.status))
-            return
+            errmsg = "The feed server couldn\'t return the file." + u" Code: " + str(resp.status) + "\n"
+            utils.tooltip(errmsg)
+            return errmsg
+    finally:
+        mw.progress.finish()
 
     #parse xml
     doc = BeautifulStoneSoup(data, selfClosingTags=['link'], convertEntities=BeautifulStoneSoup.XHTML_ENTITIES)
