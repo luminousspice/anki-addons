@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import BeautifulSoup
 import urllib2
-from aqt import mw
+from aqt import mw, utils
 from aqt.qt import *
+from anki.lang import ngettext
+from BeautifulSoup import BeautifulStoneSoup
 
 URL = "http://www.merriam-webster.com/wotd/feed/rss2"
-DECK = "Words"
-MODEL = "words"
-tags = ["MW"]
+MODEL = u"words"
+DECK = u"Word of the Day"
+tags = [u"MW",u"wotd"]
 
 def buildCard():
     # get deck and model
@@ -27,36 +28,53 @@ def buildCard():
 
     # retrieve rss
     data = urllib2.urlopen(URL)
-    doc = BeautifulSoup.BeautifulStoneSoup(data, selfClosingTags=['link'])
+    doc = BeautifulStoneSoup(data, selfClosingTags=['link'], convertEntities=BeautifulStoneSoup.ALL_ENTITIES)
 
-    if not doc.find('entry') is None:
-        items = doc.findAll('entry')
-    elif not doc.find('item') is None:
+    if not doc.find('item') is None:
         items = doc.findAll('item')
+        feed = "rss"
+    elif not doc.find('entry') is None:
+        items = doc.findAll('entry')
+        feed = "atom"
     else:
         return
 
     # iterate notes
+    dups = 0
+    adds = 0
+    log = ""
     for item in items:
         note = mw.col.newNote()
         note['Front'] = item.title.string
-        if not item.summary is None:
-            note['Back'] = item.summary.string
-        elif not item.description is None:
-            note['Back'] = item.description.string
-        if not item.link.string is None:
-            note['id'] = item.link.string
-        elif not item.link['href'] is None:
-            note['id'] = item.link['href']
-        else:
-            note['id'] = item.id.string
-        note.tags = filter(None, tags)
-        if note.dupeOrEmpty():
+        nounique = note.dupeOrEmpty()
+        if nounique:
+            if nounique == 2:
+                log += "%s \n" % note['Front']
             continue
+        if feed == "rss":
+            if not item.link.string is None:
+                note['Link'] = item.link.string
+            if not item.description is None:
+                note['Back'] = item.description.string
+        if feed == "atom":
+            if not item.link['href'] is None:
+                note['Link'] = item.link['href']
+            if not item.summary is None:
+                note['Back'] = item.summary.string
+        note.tags = filter(None, tags)
         mw.col.addNote(note)
+        adds += 1
 
     mw.col.reset()
     mw.reset()
+
+    #show result
+    msg = ngettext("%d note added", "%d notes added", adds) % adds
+    msg += "\n"
+    if len(log) > 0:
+        msg += _("duplicate") + ":\n"
+        msg += log
+    utils.showText(msg)
 
 # create a new menu item
 action = QAction("Feed to Anki", mw)
