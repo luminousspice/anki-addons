@@ -65,6 +65,9 @@ def buildCard():
     mw.col.models.current()['did'] = deck['id']
     mw.col.models.save(model)
 
+    from urllib2_tls import TLS1Handler
+    urllib2.install_opener(urllib2.build_opener(TLS1Handler()))
+
     # retrieve rss
     try:
         data = urllib2.urlopen(URL)
