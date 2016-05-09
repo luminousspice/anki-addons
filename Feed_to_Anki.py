@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Feed to Anki: an Anki addon makes a RSS (or Atom) Feed into Anki cards.
-# Version: 0.2.1
+# Version: 0.2.2
 # GitHub: https://github.com/luminousspice/anki-addons/
 #
 # Copyright: 2016 Luminous Spice <luminous.spice@gmail.com>
@@ -128,7 +128,9 @@ def buildCard():
             if not item.description is None:
                 note[_("Back")] = item.description.text
         if feed == "atom":
-            if not item.summary is None:
+            if not item.content is None:
+                note[_("Back")] = item.content.text
+            elif not item.summary is None:
                 note[_("Back")] = item.summary.text
         note.tags = filter(None, tags)
         mw.col.addNote(note)
