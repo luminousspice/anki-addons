@@ -66,8 +66,9 @@ def buildCard(**kw):
     else:
         s = mw.col.models.scmhash(model)
         if s != SCMHASH:
-            model = addBasicModel(mw.col)
             model['name'] = MODEL +  "-" + model['id']
+            model = addBasicModel(mw.col)
+            model['name'] = MODEL
 
     # assign model to deck
     mw.col.decks.select(deck['id'])
