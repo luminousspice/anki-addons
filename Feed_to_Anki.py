@@ -3,6 +3,7 @@
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/copyleft/agpl.html
 #
 # Feed to Anki: an Anki addon makes a RSS (or Atom) Feed into Anki cards.
+# Version: 0.2.1
 # GitHub: https://github.com/luminousspice/anki-addons/
 
 import ssl
@@ -76,7 +77,7 @@ def buildCard():
     mw.col.models.setCurrent(model)
     mw.col.models.current()['did'] = deck['id']
     mw.col.models.save(model)
-    
+
     # retrieve rss
     try:
         h = httplib2.Http(".cache")
