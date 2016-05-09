@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Feed to Anki: an Anki addon makes a RSS (or Atom) Feed into Anki cards.
-# Version: 0.2.2
+# Version: 0.3.0
 # GitHub: https://github.com/luminousspice/anki-addons/
 #
 # Copyright: 2016 Luminous Spice <luminous.spice@gmail.com>
@@ -9,6 +9,20 @@
 # Third party software used with Feed to Anki.
 # Httplib2. Copyright (c) 2006 by Joe Gregorio. Released under the MIT License.
 # https://github.com/httplib2/httplib2/blob/master/LICENSE
+
+##### Feeds info (URL, deck, tags) #####
+Feeds = [
+    {"URL": "http://www.merriam-webster.com/wotd/feed/rss2",
+     "DECK": u"Word of the Day::Merriam-Webster",
+     "tags": [u"wotd",u"MW"]},
+    {"URL": "http://www.macmillandictionary.com/wotd/wotdrss.xml",
+     "DECK": u"Word of the Day::Macmillan",
+     "tags": [u"wotd",u"Macmillan"]},
+    {"URL": "http://www.oxforddictionaries.com/wordoftheday/wotdrss.xml",
+     "DECK": u"Word of the Day::Oxford",
+     "tags": [u"wotd",u"ODE"]},
+]
+########################################
 
 import ssl
 from functools import wraps
@@ -19,13 +33,6 @@ from aqt.qt import *
 from anki.stdmodels import addBasicModel
 from anki.lang import ngettext
 from BeautifulSoup import BeautifulStoneSoup
-
-# Feeds info (URL, deck, tags)
-Feeds = [
-    {"URL": "http://www.merriam-webster.com/wotd/feed/rss2", "DECK": u"Word of the Day::Merriam-Webster", "tags": [u"wotd",u"MW"]},
-    {"URL": "http://www.macmillandictionary.com/wotd/wotdrss.xml", "DECK": u"Word of the Day::Macmillan", "tags": [u"wotd",u"Macmillan"]},
-    {"URL": "http://www.oxforddictionaries.com/wordoftheday/wotdrss.xml", "DECK": u"Word of the Day::Oxford", "tags": [u"wotd",u"ODE"]},
-]
 
 MODEL = u"Feed_to_Anki"
 SCMHASH = "5d7044a40342c678a55835f6c456deead837000a"
