@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Feed to Anki: an Anki addon makes a RSS (or Atom) Feed into Anki cards.
-# Version: 0.3.0
+# Version: 0.3.1
 # GitHub: https://github.com/luminousspice/anki-addons/
 #
 # Copyright: 2016 Luminous Spice <luminous.spice@gmail.com>
@@ -15,12 +15,9 @@ Feeds = [
     {"URL": "http://www.merriam-webster.com/wotd/feed/rss2",
      "DECK": u"Word of the Day::Merriam-Webster",
      "tags": [u"wotd",u"MW"]},
-    {"URL": "http://www.macmillandictionary.com/wotd/wotdrss.xml",
-     "DECK": u"Word of the Day::Macmillan",
-     "tags": [u"wotd",u"Macmillan"]},
-    {"URL": "http://www.oxforddictionaries.com/wordoftheday/wotdrss.xml",
+    {"URL": "http://feeds.feedburner.com/OAAD-WordOfTheDay?format=xml",
      "DECK": u"Word of the Day::Oxford",
-     "tags": [u"wotd",u"ODE"]},
+     "tags": [u"wotd",u"OAAD"]},
 ]
 ########################################
 
