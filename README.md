@@ -2,6 +2,9 @@
 
 Simple add-ons add some features to Anki.
 
+## [Ease Factor Histogram](https://ankiweb.net/shared/info/494944895) (Code: 494944895)
+Ease Factor Histogram: an Anki addon appends a histogram of Ease Factor on the stats screen.
+
 ## [Feed to Anki](https://ankiweb.net/shared/info/1895937979) (Code: 1895937979)
 Feed to Anki: an Anki addon makes a RSS (or Atom) Feed into Anki cards.
 
