@@ -2,6 +2,15 @@
 
 Simple add-ons add some features to Anki.
 
+## [Another Retreat](https://ankiweb.net/shared/info/1481634779) (Code: 1481634779)
+Another Retreat: an Anki addon sets the next interval at lapse to the last succeed interval.
+
+**Model Diagram for Another Retreat**
+
+![Model Diagram for Another Retreat](http://rs.luminousspice.com/images/Leitner_system.svg)
+
+For more details: [忘れた Anki カードの出直し方](http://rs.luminousspice.com/anki-lapse-management/)
+
 ## [Ease Factor Histogram](https://ankiweb.net/shared/info/494944895) (Code: 494944895)
 Ease Factor Histogram: an Anki addon appends a histogram of Ease Factor on the stats screen.
 
