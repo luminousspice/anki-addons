@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-# Ease Factor Histogram: an Anki addon appends a histogram of Ease Factor on the stats screen.
-# Version: 0.1.0
+# Ease Factor Histogram: an Anki addon appends a histogram of Ease Factor
+# on the stats screen.
+# Version: 0.1.1
 # GitHub: https://github.com/luminousspice/anki-addons/
 #
 # Copyright: 2016 Luminous Spice <luminous.spice@gmail.com>
@@ -9,7 +10,6 @@
 from collections import Counter
 from anki.stats import CollectionStats
 from anki.hooks import wrap
-from aqt import mw, utils
 
 colCum = "rgba(0,0,0,0.9)"
 colFactor = "#07c"
