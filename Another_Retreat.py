@@ -13,16 +13,13 @@ from anki.sched import Scheduler
 def withdrawLapseIvl(self, card, conf):
     ''' Return the latest lastivl from revlog.'''
     ivls = self.col.db.list("""
-select ivl from revlog where cid = ? order by id desc
+select ivl from revlog where cid = ? and ivl > 0 order by id desc
 """, card.id)
-    lastIvls = self.col.db.list("""
-select lastivl from revlog where cid = ? and type = 1 order by id desc
-""", card.id)
-    civls = [x for x in ivls if x > 0]
-    d = [x for x in lastIvls if x < civls[0]]
-    if d:
-        return max(conf['minInt'], d[0])
-    else:
-        return conf['minInt']
+    if ivls:
+        backward_ivls = [x for x in ivls if 0 < x < ivls[0]]
+        if backward_ivls:
+            return max(conf['minInt'], backward_ivls[0])
+
+    return conf['minInt']
 
 Scheduler._nextLapseIvl = withdrawLapseIvl
