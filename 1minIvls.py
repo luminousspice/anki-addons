@@ -20,13 +20,12 @@ def onemin_ivls():
         cids = mw.col.db.list("select id from cards where did = ?", d)
         counter = 0
         for x in cids:
-          counter += mw.col.db.scalar("select count() from revlog where lastivl = -60 and cid = ? order by id desc", x)
+            counter += mw.col.db.scalar("select count() from revlog where lastivl = -60 and cid = ? order by id desc", x)
         deck  = mw.col.decks.get(d)
-        print deck['name'] + u": "+ str(counter)
         list.append([deck['name'],counter])
     list = sorted(list,key=lambda x:x[0])
     for l in list:
-      r += str(l[0])+": \t"+str(l[1])+"\n"
+        r += str(l[0])+": \t"+str(l[1])+"\n"
     showText(r)
 
 
