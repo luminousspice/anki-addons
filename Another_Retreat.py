@@ -11,7 +11,12 @@ import time
 import random
 from heapq import heappush
 
+from PyQt4 import QtGui
+
 from anki.sched import Scheduler
+from aqt.deckconf import DeckConf
+from aqt.forms import dconf
+from anki.hooks import wrap
 
 
 def newAnswerLrnCard(self, card, ease):
@@ -79,14 +84,40 @@ def newAnswerLrnCard(self, card, ease):
 
 def withdrawLapseIvl(self, card, conf):
     """Return the previous succeed ivl from revlog."""
-    ivls = self.col.db.list("""
-select ivl from revlog where cid = ? and ivl > 0 order by id desc
-""", card.id)
-    if ivls:
-        backward_ivls = [x for x in ivls if 0 < x < ivls[0]]
-        if backward_ivls:
-            return max(conf['minInt'], backward_ivls[0])
-    return conf['minInt']
+    dconf = self.col.decks.confForDid(card.did)
+    if dconf['anotherRetreat']:
+        ivls = self.col.db.list("""
+    select ivl from revlog where cid = ? and ivl > 0 order by id desc
+    """, card.id)
+        if ivls:
+            backward_ivls = [x for x in ivls if 0 < x < ivls[0]]
+            if backward_ivls:
+                return max(conf['minInt'], backward_ivls[0])
+    return max(conf['minInt'], int(card.ivl*conf['mult']))
+
+
+def setupUi(self, Dialog):
+    """Add an option for Another Retreat at lapse section on Deckconf dialog."""
+    self.anotherRetreat = QtGui.QCheckBox(self.tab_2)
+    self.anotherRetreat.setText(_("Activate Another Retreat Addon"))
+    self.gridLayout_2.addWidget(self.anotherRetreat, 5, 0, 1, 3)
+
+
+def load_conf(self):
+    """Get the option for Another Retreat."""
+    self.conf = self.mw.col.decks.confForDid(self.deck['id'])
+    c = self.conf
+    f = self.form
+    f.anotherRetreat.setChecked(c.get("anotherRetreat", False))
+
+
+def save_conf(self):
+    """Save the option for Another Retreat."""
+    self.conf['anotherRetreat'] = self.form.anotherRetreat.isChecked()
+
 
 Scheduler._nextLapseIvl = withdrawLapseIvl
 Scheduler._answerLrnCard = newAnswerLrnCard
+dconf.Ui_Dialog.setupUi = wrap(dconf.Ui_Dialog.setupUi, setupUi)
+DeckConf.loadConf = wrap(DeckConf.loadConf, load_conf)
+DeckConf.saveConf = wrap(DeckConf.saveConf, save_conf, 'before')
