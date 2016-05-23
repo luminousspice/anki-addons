@@ -87,10 +87,10 @@ def withdrawLapseIvl(self, card, conf):
     dconf = self.col.decks.confForDid(card.did)
     if dconf.get('anotherRetreat'):
         ivls = self.col.db.list("""
-    select ivl from revlog where cid = ? and ivl > 0 order by id desc
-    """, card.id)
+select ivl from revlog where cid = ? and ivl > 0 order by id desc
+""", card.id)
         if ivls:
-            backward_ivls = [x for x in ivls if 0 < x < ivls[0]]
+            backward_ivls = [x for x in ivls if x < ivls[0]]
             if backward_ivls:
                 return max(conf['minInt'], backward_ivls[0])
     return max(conf['minInt'], int(card.ivl*conf['mult']))
