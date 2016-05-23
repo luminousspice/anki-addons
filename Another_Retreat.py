@@ -85,7 +85,7 @@ def newAnswerLrnCard(self, card, ease):
 def withdrawLapseIvl(self, card, conf):
     """Return the previous succeed ivl from revlog."""
     dconf = self.col.decks.confForDid(card.did)
-    if dconf['anotherRetreat']:
+    if dconf.get('anotherRetreat'):
         ivls = self.col.db.list("""
     select ivl from revlog where cid = ? and ivl > 0 order by id desc
     """, card.id)
