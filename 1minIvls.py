@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# 1min Interval Counter: an Anki addon reports totals of 1min interval
+# 1min Interval Report: an Anki addon reports totals and ratio of 1min interval
 # in review log for each deck.
 # GitHub: https://github.com/luminousspice/anki-addons/
 #
@@ -12,21 +12,40 @@ from aqt.qt import *
 
 
 def onemin_ivls():
-    """Display totals of 1min ivl in revlog for each deck."""
-    list = []
-    r = "1min Interval count in review log for each deck\n\n"
+    """Display totals and ratio of 1min ivl in revlog for each deck."""
     dids = mw.col.decks.allIds()
+    ivlslist = []
+    r = "1min Interval Report:\n\n"
+    r += "Deck\tCount\t% Total\t% in Learn\n"
     for d in dids:
         cids = mw.col.db.list("select id from cards where did = ?", d)
         counter = 0
+        ratio = 0
+        clist = []
+        csize = 0
+        lcounter = 0
+        lratio = 0
+        llist = []
+        lsize = 0
         for x in cids:
-            counter += mw.col.db.scalar("select count() from revlog where lastivl = -60 and cid = ? order by id desc", x)
-        deck  = mw.col.decks.get(d)
-        list.append([deck['name'],counter])
-    list = sorted(list,key=lambda x:x[0])
-    for l in list:
-        r += str(l[0])+": \t"+str(l[1])+"\n"
-    showText(r)
+            clist = mw.col.db.list("""
+select lastivl from revlog where cid = ? order by id desc""", x)
+            counter += clist.count(-60)
+            csize += len(clist)
+            llist = mw.col.db.list("""
+select lastivl from revlog where type = 0 and cid = ? order by id desc""", x)
+            lcounter += llist.count(-60)
+            lsize += len(llist)
+        if csize:
+            ratio = counter * 100 / csize
+        if lsize:
+            lratio = lcounter * 100 / lsize
+        deck = mw.col.decks.get(d)
+        ivlslist.append([deck['name'], counter, ratio, lratio])
+    ivlslist = sorted(ivlslist, key=lambda x: x[0])
+    for l in ivlslist:
+        r += "%s\t%d\t%0.1f\t%0.1f\n" % (l[0], l[1], l[2], l[3])
+    print showText(r)
 
 
 action = QAction("1min Interval Report", mw)
