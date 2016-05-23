@@ -11,12 +11,9 @@ from aqt.utils import showText
 from aqt.qt import *
 
 
-def onemin_ivls():
-    """Display totals and ratio of 1min ivl in revlog for each deck."""
-    dids = mw.col.decks.allIds()
+def onemin_ivls_list(dids):
+    """Retrieve lists of 1min ivl in revlog for each deck."""
     ivlslist = []
-    r = "1min Interval Report:\n\n"
-    r += "Deck\tCount\t% Total\t% in Learn\n"
     for d in dids:
         cids = mw.col.db.list("select id from cards where did = ?", d)
         counter = 0
@@ -43,9 +40,23 @@ select lastivl from revlog where type = 0 and cid = ? order by id desc""", x)
         deck = mw.col.decks.get(d)
         ivlslist.append([deck['name'], counter, ratio, lratio])
     ivlslist = sorted(ivlslist, key=lambda x: x[0])
-    for l in ivlslist:
+    return ivlslist
+
+
+def display_result(ilist):
+    """Format and Display the report on a showText window."""
+    r = "1min Interval Report:\n\n"
+    r += "Deck\tCount\t% Total\t% in Learn\n"
+    for l in ilist:
         r += "%s\t%d\t%0.1f\t%0.1f\n" % (l[0], l[1], l[2], l[3])
-    print showText(r)
+    showText(r)
+
+
+def onemin_ivls():
+    """Display totals and ratio of 1min ivl in revlog for each deck."""
+    dids = mw.col.decks.allIds()
+    ivls = onemin_ivls_list(dids)
+    display_result(ivls)
 
 
 action = QAction("1min Interval Report", mw)
