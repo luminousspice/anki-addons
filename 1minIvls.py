@@ -10,6 +10,11 @@ from aqt import mw
 from aqt.utils import showText
 from aqt.qt import *
 
+#Interval value: 1min = -60, 10min = -600, 1day = 1
+IVL = -60
+#Session Type: 0=lrn, 1=rev, 2=relrn, 3=cram
+TYPE = 0
+
 
 def onemin_ivls_list(dids):
     """Retrieve lists of 1min ivl in revlog for each deck."""
@@ -26,12 +31,14 @@ def onemin_ivls_list(dids):
         lsize = 0
         for x in cids:
             clist = mw.col.db.list("""
-select lastivl from revlog where cid = ? order by id desc""", x)
-            counter += clist.count(-60)
+select lastivl from revlog where cid = ? order by id desc
+""", x)
+            counter += clist.count(IVL)
             csize += len(clist)
             llist = mw.col.db.list("""
-select lastivl from revlog where type = 0 and cid = ? order by id desc""", x)
-            lcounter += llist.count(-60)
+select lastivl from revlog where type = ? and cid = ? order by id desc
+""", TYPE, x)
+            lcounter += llist.count(IVL)
             lsize += len(llist)
         if csize:
             ratio = counter * 100 / csize
