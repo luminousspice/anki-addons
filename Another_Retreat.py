@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Another Retreat:
 # an Anki addon sets the next interval at lapse to the last succeed interval.
-# Version: 0.2.0
+# Version: 0.3.0
 # GitHub: https://github.com/luminousspice/anki-addons/
 #
 # Copyright: 2016 Luminous Spice <luminous.spice@gmail.com>
