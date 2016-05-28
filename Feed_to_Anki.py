@@ -116,14 +116,13 @@ def buildCard(**kw):
     # iterate notes
     dups = 0
     adds = 0
-    log = ""
     for item in items:
         note = mw.col.newNote()
         note[target_fields[0]] = item.title.text
         nounique = note.dupeOrEmpty()
         if nounique:
             if nounique == 2:
-                log += "%s \n" % note[_("Front")]
+                dups += 1
             continue
         if feed == "rss":
             if not item.description is None:
@@ -143,9 +142,11 @@ def buildCard(**kw):
     # show result
     msg = ngettext("%d note added", "%d notes added", adds) % adds
     msg += "\n"
-    if len(log) > 0:
-        msg += _("duplicate") + ":\n"
-        msg += log
+    if dups > 0:
+        msg += _("<ignored>") + "\n"
+        msg += _("duplicate") + ": "
+        msg += ngettext("%d note", "%d notes", dups) % dups
+        msg += "\n"
     return msg
 
 # create a new menu item
