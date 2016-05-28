@@ -46,16 +46,18 @@ ssl.wrap_socket = sslwrap(ssl.wrap_socket)
 # iterate decks
 def buildCards():
     msg = ""
+    mw.progress.start(immediate=True)
     for i in range(len(Feeds)):
         msg += Feeds[i]["DECK"] + ":\n"
         msg += buildCard(**Feeds[i]) + "\n"
+    mw.progress.finish()
     utils.showText(msg)
 
 def buildCard(**kw):
     # get deck and model
     deck  = mw.col.decks.get(mw.col.decks.id(kw['DECK']))
     model = mw.col.models.byName(MODEL)
-    
+
     # if MODEL doesn't exist, use built-in Basic Model
     if model is None:
         model = addBasicModel(mw.col)
@@ -78,7 +80,6 @@ def buildCard(**kw):
     mw.col.models.save(model)
 
     # retrieve rss
-    mw.progress.start(immediate=True)
     try:
         h = httplib2.Http(".cache")
         (resp, data) = h.request(kw['URL'], "GET")
@@ -95,8 +96,6 @@ def buildCard(**kw):
             errmsg = "The feed server couldn\'t return the file." + u" Code: " + str(resp.status) + "\n"
             utils.tooltip(errmsg)
             return errmsg
-    finally:
-        mw.progress.finish()
 
     #parse xml
     doc = BeautifulStoneSoup(data, selfClosingTags=['link'], convertEntities=BeautifulStoneSoup.XHTML_ENTITIES)
