@@ -85,16 +85,13 @@ def buildCard(**kw):
         (resp, data) = h.request(kw['URL'], "GET")
     except httplib2.ServerNotFoundError, e:
         errmsg = u"Failed to reach the feed server." + str(e) + "\n"
-        utils.tooltip(errmsg)
         return errmsg
     except httplib2.HttpLib2Error, e:
         errmsg = u"The feed server couldn\'t fulfill the request." + str(e) + "\n"
-        utils.tooltip(errmsg)
         return errmsg
     else:
         if not str(resp.status) in ("200","304"):
             errmsg = "The feed server couldn\'t return the file." + u" Code: " + str(resp.status) + "\n"
-            utils.tooltip(errmsg)
             return errmsg
 
     #parse xml
@@ -112,14 +109,13 @@ def buildCard(**kw):
     # iterate notes
     dups = 0
     adds = 0
-    log = ""
     for item in items:
         note = mw.col.newNote()
         note[_("Front")] = item.title.text
         nounique = note.dupeOrEmpty()
         if nounique:
             if nounique == 2:
-                log += "%s \n" % note[_("Front")]
+                dups += 1
             continue
         if feed == "rss":
             if not item.description is None:
@@ -139,9 +135,11 @@ def buildCard(**kw):
     # show result
     msg = ngettext("%d note added", "%d notes added", adds) % adds
     msg += "\n"
-    if len(log) > 0:
-        msg += _("duplicate") + ":\n"
-        msg += log
+    if dups > 0:
+        msg += _("<ignored>") + "\n"
+        msg += _("duplicate") + ": "
+        msg += ngettext("%d note", "%d notes", dups) % dups
+        msg += "\n"
     return msg
 
 # create a new menu item
