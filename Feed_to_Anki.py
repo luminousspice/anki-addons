@@ -63,6 +63,7 @@ def buildCard(**kw):
     # get deck and model
     deck  = mw.col.decks.get(mw.col.decks.id(kw['DECK']))
     model = mw.col.models.byName(MODEL)
+
     # if MODEL doesn't exist, create a MODEL
     if model is None:
         model = addFeedModel(mw.col)
@@ -86,7 +87,6 @@ def buildCard(**kw):
     mw.col.models.save(model)
 
     # retrieve rss
-    mw.progress.start(immediate=True)
     try:
         h = httplib2.Http(".cache")
         (resp, data) = h.request(kw['URL'], "GET")
@@ -100,8 +100,6 @@ def buildCard(**kw):
         if not str(resp.status) in ("200", "304"):
             errmsg = "The server couldn\'t return the file." + u" Code: " + str(resp.status) + "\n"
             return errmsg
-    finally:
-        mw.progress.finish()
 
     #parse xml
     doc = BeautifulSoup(data, "html.parser")
