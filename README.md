@@ -28,6 +28,12 @@ Find Matures: an Anki addon adds a tag to find mature cards on the left pane of 
 
 ![mature tag in the pane](mature.png)
 
+## [Japanese Help Launcher](https://ankiweb.net/shared/info/103383488) (Code: 103383488)
+Japanese Help Launcher: an Anki addon adds an menu item to launch Anki help document in Japanese.
+
+![select through the help menu](ja_help.png)
+
+
 ## [Mature Tag](https://ankiweb.net/shared/info/17741639) (Code: 17741639)
 This Add-on automatically adds a tag on your mature notes after the review.
 
