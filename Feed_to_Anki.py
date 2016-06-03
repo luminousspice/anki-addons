@@ -32,7 +32,6 @@ from anki.lang import ngettext
 from BeautifulSoup import BeautifulStoneSoup
 
 MODEL = u"Feed_to_Anki"
-SCMHASH = "5d7044a40342c678a55835f6c456deead837000a"
 
 def sslwrap(func):
     @wraps(func)
@@ -61,8 +60,9 @@ def buildCard(**kw):
         model = addBasicModel(mw.col)
         model['name'] = MODEL
     else:
-        s = mw.col.models.scmhash(model)
-        if s != SCMHASH:
+        act_name = set([f['name'] for f in model['flds']])
+        std_name = set([_('Front'), _('Back')])
+        if not len(act_name&std_name) == 2:
             model['name'] = MODEL +  "-" + model['id']
             model = addBasicModel(mw.col)
             model['name'] = MODEL
