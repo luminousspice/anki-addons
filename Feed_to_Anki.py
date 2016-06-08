@@ -11,27 +11,29 @@
 # https://github.com/httplib2/httplib2/blob/master/LICENSE
 
 ##### Feeds info (URL, deck, tags) #####
-Feeds = [
+feeds_info = [
     {"URL": "http://www.merriam-webster.com/wotd/feed/rss2",
      "DECK": u"Word of the Day::Merriam-Webster",
-     "tags": [u"wotd",u"MW"]},
+     "tags": [u"wotd", u"MW"]},
     {"URL": "http://feeds.feedburner.com/OAAD-WordOfTheDay?format=xml",
      "DECK": u"Word of the Day::Oxford",
-     "tags": [u"wotd",u"OAAD"]},
+     "tags": [u"wotd", u"OAAD"]},
 ]
 ########################################
 
 import ssl
 from functools import wraps
-import feed_to_anki.httplib2 as httplib2
 
 from aqt import mw, utils
 from aqt.qt import *
 from anki.lang import ngettext
 from BeautifulSoup import BeautifulStoneSoup
 
+import feed_to_anki.httplib2 as httplib2
+
+
 MODEL = u"Feed_to_Anki"
-fields = [u"Front", u"Back"]
+target_fields = [u"Front", u"Back"]
 
 
 def sslwrap(func):
@@ -48,12 +50,12 @@ def addFeedModel(col):
     # add the model for feeds
     mm = col.models
     m = mm.new(MODEL)
-    for f in fields:
+    for f in target_fields:
         fm = mm.newField(f)
         mm.addField(m, fm)
     t = mm.newTemplate(u"Card 1")
-    t['qfmt'] = "{{"+fields[0]+"}}"
-    t['afmt'] = "{{FrontSide}}\n\n<hr id=answer>\n\n"+"{{"+fields[1]+"}}"
+    t['qfmt'] = "{{"+target_fields[0]+"}}"
+    t['afmt'] = "{{FrontSide}}\n\n<hr id=answer>\n\n"+"{{"+target_fields[1]+"}}"
     mm.addTemplate(m, t)
     mm.add(m)
     return m
@@ -63,9 +65,9 @@ def addFeedModel(col):
 def buildCards():
     msg = ""
     mw.progress.start(immediate=True)
-    for i in range(len(Feeds)):
-        msg += Feeds[i]["DECK"] + ":\n"
-        msg += buildCard(**Feeds[i]) + "\n"
+    for i in range(len(feeds_info)):
+        msg += feeds_info[i]["DECK"] + ":\n"
+        msg += buildCard(**feeds_info[i]) + "\n"
     mw.progress.finish()
     utils.showText(msg)
 
@@ -81,7 +83,7 @@ def buildCard(**kw):
         model['name'] = MODEL
     else:
         act_name = set([f['name'] for f in model['flds']])
-        std_name = set(fields)
+        std_name = set(target_fields)
         if not len(act_name & std_name) == 2:
             model['name'] = MODEL + "-" + model['id']
             model = addFeedModel(mw.col)
@@ -102,14 +104,14 @@ def buildCard(**kw):
         h = httplib2.Http(".cache")
         (resp, data) = h.request(kw['URL'], "GET")
     except httplib2.ServerNotFoundError, e:
-        errmsg = u"Failed to reach the feed server." + str(e) + "\n"
+        errmsg = u"Failed to reach the server." + str(e) + "\n"
         return errmsg
     except httplib2.HttpLib2Error, e:
-        errmsg = u"The feed server couldn\'t fulfill the request." + str(e) + "\n"
+        errmsg = u"The server couldn\'t fulfill the request." + str(e) + "\n"
         return errmsg
     else:
-        if not str(resp.status) in ("200","304"):
-            errmsg = "The feed server couldn\'t return the file." + u" Code: " + str(resp.status) + "\n"
+        if not str(resp.status) in ("200", "304"):
+            errmsg = "The server couldn\'t return the file." + u" Code: " + str(resp.status) + "\n"
             return errmsg
 
     #parse xml
@@ -129,7 +131,7 @@ def buildCard(**kw):
     adds = 0
     for item in items:
         note = mw.col.newNote()
-        note[fields[0]] = item.title.text
+        note[target_fields[0]] = item.title.text
         nounique = note.dupeOrEmpty()
         if nounique:
             if nounique == 2:
@@ -137,12 +139,12 @@ def buildCard(**kw):
             continue
         if feed == "rss":
             if not item.description is None:
-                note[fields[1]] = item.description.text
+                note[target_fields[1]] = item.description.text
         if feed == "atom":
             if not item.content is None:
-                note[fields[1]] = item.content.text
+                note[target_fields[1]] = item.content.text
             elif not item.summary is None:
-                note[fields[1]] = item.summary.text
+                note[target_fields[1]] = item.summary.text
         note.tags = filter(None, kw['tags'])
         mw.col.addNote(note)
         adds += 1
