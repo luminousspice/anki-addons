@@ -27,11 +27,12 @@ import feed_to_anki.httplib2 as httplib2
 
 from aqt import mw, utils
 from aqt.qt import *
-from anki.stdmodels import addBasicModel
 from anki.lang import ngettext
 from BeautifulSoup import BeautifulStoneSoup
 
 MODEL = u"Feed_to_Anki"
+fields = [u"Front", u"Back"]
+
 
 def sslwrap(func):
     @wraps(func)
@@ -42,6 +43,22 @@ def sslwrap(func):
 
 ssl.wrap_socket = sslwrap(ssl.wrap_socket)
 
+
+def addFeedModel(col):
+    # add the model for feeds
+    mm = col.models
+    m = mm.new(MODEL)
+    for f in fields:
+        fm = mm.newField(f)
+        mm.addField(m, fm)
+    t = mm.newTemplate(u"Card 1")
+    t['qfmt'] = "{{"+fields[0]+"}}"
+    t['afmt'] = "{{FrontSide}}\n\n<hr id=answer>\n\n"+"{{"+fields[1]+"}}"
+    mm.addTemplate(m, t)
+    mm.add(m)
+    return m
+
+
 # iterate decks
 def buildCards():
     msg = ""
@@ -50,21 +67,21 @@ def buildCards():
         msg += buildCard(**Feeds[i]) + "\n"
     utils.showText(msg)
 
+
 def buildCard(**kw):
     # get deck and model
     deck  = mw.col.decks.get(mw.col.decks.id(kw['DECK']))
     model = mw.col.models.byName(MODEL)
-    
-    # if MODEL doesn't exist, use built-in Basic Model
+    # if MODEL doesn't exist, create a MODEL
     if model is None:
-        model = addBasicModel(mw.col)
+        model = addFeedModel(mw.col)
         model['name'] = MODEL
     else:
         act_name = set([f['name'] for f in model['flds']])
-        std_name = set([_('Front'), _('Back')])
-        if not len(act_name&std_name) == 2:
-            model['name'] = MODEL +  "-" + model['id']
-            model = addBasicModel(mw.col)
+        std_name = set(fields)
+        if not len(act_name & std_name) == 2:
+            model['name'] = MODEL + "-" + model['id']
+            model = addFeedModel(mw.col)
             model['name'] = MODEL
 
     # assign model to deck
@@ -116,7 +133,7 @@ def buildCard(**kw):
     log = ""
     for item in items:
         note = mw.col.newNote()
-        note[_("Front")] = item.title.text
+        note[fields[0]] = item.title.text
         nounique = note.dupeOrEmpty()
         if nounique:
             if nounique == 2:
@@ -124,12 +141,12 @@ def buildCard(**kw):
             continue
         if feed == "rss":
             if not item.description is None:
-                note[_("Back")] = item.description.text
+                note[fields[1]] = item.description.text
         if feed == "atom":
             if not item.content is None:
-                note[_("Back")] = item.content.text
+                note[fields[1]] = item.content.text
             elif not item.summary is None:
-                note[_("Back")] = item.summary.text
+                note[fields[1]] = item.summary.text
         note.tags = filter(None, kw['tags'])
         mw.col.addNote(note)
         adds += 1
