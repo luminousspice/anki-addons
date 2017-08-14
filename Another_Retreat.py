@@ -11,7 +11,10 @@ import time
 import random
 from heapq import heappush
 
-from PyQt4 import QtGui
+try:
+    from PyQt5 import QtWidgets
+except ImportError:
+    from PyQt4 import QtGui
 
 from anki.sched import Scheduler
 from aqt.deckconf import DeckConf
@@ -98,7 +101,10 @@ select ivl from revlog where cid = ? and ivl > 0 order by id desc
 
 def setupUi(self, Dialog):
     """Add an option for Another Retreat at lapse section on Deckconf dialog."""
-    self.anotherRetreat = QtGui.QCheckBox(self.tab_2)
+    try:
+        self.anotherRetreat = QtWidgets.QCheckBox(self.tab_2)
+    except NameError:
+        self.anotherRetreat = QtGui.QCheckBox(self.tab_2)
     self.anotherRetreat.setText(_("Activate Another Retreat Addon"))
     self.gridLayout_2.addWidget(self.anotherRetreat, 5, 0, 1, 3)
 
