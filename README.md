@@ -5,7 +5,7 @@ Simple add-ons add some features to Anki.
 ## [Another Retreat](https://ankiweb.net/shared/info/1481634779) (Code: 1481634779)
 Another Retreat: an Anki addon sets the next interval at lapse to the last succeed interval.
 
-**Note: This add-on will not work with Anki 2.1.**
+**Note: This add-on also works with Anki 2.1.**
 
 **Model Diagram for Another Retreat**
 
@@ -32,7 +32,7 @@ For more details: [Feed to Anki 毎日英単語のカードを増やせるアド
 ## [Find Mature](https://ankiweb.net/shared/info/339760671) (Code: 339760671)
 Find Matures: an Anki addon adds a tag to find mature cards on the left pane of Card Browser.
 
-**Note: This add-on also works with Anki 2.1.**
+**Note: This add-on will not work with Anki 2.1 after beta 11.**
 
 ![mature tag in the pane](mature.png)
 
