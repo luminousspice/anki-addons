@@ -27,5 +27,5 @@ def launch_doc():
 # create a new menu item
 action = QAction(_(u"日本語マニュアル"), mw)
 action.setShortcut("Shift+F1")
-mw.connect(action, SIGNAL("triggered()"), launch_doc)
+action.triggered.connect(launch_doc)
 mw.form.menuHelp.addAction(action)
