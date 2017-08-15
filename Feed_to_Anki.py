@@ -21,29 +21,16 @@ feeds_info = [
 ]
 ########################################
 
-import ssl
-from functools import wraps
-
 from aqt import mw, utils
 from aqt.qt import *
 from anki.lang import ngettext
-from BeautifulSoup import BeautifulStoneSoup
+from bs4 import BeautifulSoup
 
 import feed_to_anki.httplib2 as httplib2
 
 
 MODEL = u"Feed_to_Anki"
 target_fields = [u"Front", u"Back"]
-
-
-def sslwrap(func):
-    @wraps(func)
-    def bar(*args, **kw):
-        kw['ssl_version'] = ssl.PROTOCOL_TLSv1
-        return func(*args, **kw)
-    return bar
-
-ssl.wrap_socket = sslwrap(ssl.wrap_socket)
 
 
 def addFeedModel(col):
@@ -103,10 +90,10 @@ def buildCard(**kw):
     try:
         h = httplib2.Http(".cache")
         (resp, data) = h.request(kw['URL'], "GET")
-    except httplib2.ServerNotFoundError, e:
+    except httplib2.ServerNotFoundError as e:
         errmsg = u"Failed to reach the server." + str(e) + "\n"
         return errmsg
-    except httplib2.HttpLib2Error, e:
+    except httplib2.HttpLib2Error as e:
         errmsg = u"The server couldn\'t fulfill the request." + str(e) + "\n"
         return errmsg
     else:
@@ -117,7 +104,7 @@ def buildCard(**kw):
         mw.progress.finish()
 
     #parse xml
-    doc = BeautifulStoneSoup(data, selfClosingTags=['link'], convertEntities=BeautifulStoneSoup.XHTML_ENTITIES)
+    doc = BeautifulSoup(data, "html.parser")
 
     if not doc.find('item') is None:
         items = doc.findAll('item')
@@ -165,5 +152,5 @@ def buildCard(**kw):
 
 # create a new menu item
 action = QAction("Feed to Anki", mw)
-mw.connect(action, SIGNAL("triggered()"), buildCards)
+action.triggered.connect(buildCards)
 mw.form.menuTools.addAction(action)
