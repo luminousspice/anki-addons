@@ -3,7 +3,7 @@
 # in review log for each deck.
 # GitHub: https://github.com/luminousspice/anki-addons/
 #
-# Copyright: 2016 Luminous Spice <luminous.spice@gmail.com>
+# Copyright: 2016-2017 Luminous Spice <luminous.spice@gmail.com>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/copyleft/agpl.html
 
 from aqt import mw
