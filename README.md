@@ -22,24 +22,17 @@ Ease Factor Histogram: an Anki addon appends a histogram of Ease Factor on the s
 
 For more details: [Ease Factor Histogram 単語帳の健全性を診断するアドオン](http://rs.luminousspice.com/addon-ease-factor-histogram/)
 
-## [Feed to Anki](https://ankiweb.net/shared/info/1895937979) (Code: 1895937979)
+## Feed to Anki [for 2.0](https://ankiweb.net/shared/info/1895937979) (Code: 1895937979), [for 2.1](https://ankiweb.net/shared/info/655089895) (Code: 655089895)
 Feed to Anki: an Anki addon makes a RSS (or Atom) Feed into Anki cards.
 
-**Note: This add-on will not work with Anki 2.1.**
+**Note: This add-on also works with Anki 2.1.**
 
 For more details: [Feed to Anki 毎日英単語のカードを増やせるアドオン](http://rs.luminousspice.com/addon-feed-to-anki-for-wotd/)
-
-## [Find Mature](https://ankiweb.net/shared/info/339760671) (Code: 339760671)
-Find Matures: an Anki addon adds a tag to find mature cards on the left pane of Card Browser.
-
-**Note: This add-on will not work with Anki 2.1 after beta 11.**
-
-![mature tag in the pane](mature.png)
 
 ## [Japanese Help Launcher](https://ankiweb.net/shared/info/103383488) (Code: 103383488)
 Japanese Help Launcher: an Anki addon adds an menu item to launch Anki help document in Japanese.
 
-**Note: This add-on will not work with Anki 2.1.**
+**Note: This add-on also works with Anki 2.1.**
 
 ![select through the help menu](ja_help.png)
 
@@ -50,3 +43,18 @@ This Add-on automatically adds a tag on your mature notes after the review.
 **Note: This add-on also works with Anki 2.1.**
 
 A sample code for the article: [フックを使った Anki アドオンのつくり方](http://rs.luminousspice.com/how_to_create_anki_add-ons/)
+
+## [1min Interval Report](https://ankiweb.net/shared/info/1353526614) (Code: 1353526614)
+This Add-on reports totals and ratio of 1min interval in review log for each deck.
+
+**Note: This add-on also works with Anki 2.1.**
+
+For more details: [Anki における新規カード一分間トラップの分析](http://rs.luminousspice.com/1min-trap-in-anki-learning/)
+
+## [Find Mature](https://ankiweb.net/shared/info/339760671) (Code: 339760671)
+Find Matures: an Anki addon adds a tag to find mature cards on the left pane of Card Browser.
+
+**Note: This add-on will not work with Anki 2.1 after beta 11.**
+
+![mature tag in the pane](mature.png)
+
