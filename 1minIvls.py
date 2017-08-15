@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # 1min Interval Report: an Anki addon reports totals and ratio of 1min interval
 # in review log for each deck.
+# Version: 0.1.0
 # GitHub: https://github.com/luminousspice/anki-addons/
 #
 # Copyright: 2016-2017 Luminous Spice <luminous.spice@gmail.com>
