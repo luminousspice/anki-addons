@@ -67,5 +67,5 @@ def onemin_ivls():
 
 
 action = QAction("1min Interval Report", mw)
-mw.connect(action, SIGNAL("triggered()"), onemin_ivls)
+action.triggered.connect(onemin_ivls)
 mw.form.menuTools.addAction(action)
