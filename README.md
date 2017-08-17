@@ -29,13 +29,19 @@ Feed to Anki: an Anki addon makes a RSS (or Atom) Feed into Anki cards.
 
 For more details: [Feed to Anki 毎日英単語のカードを増やせるアドオン](http://rs.luminousspice.com/addon-feed-to-anki-for-wotd/)
 
+## [Backup Key](https://ankiweb.net/shared/info/1790131139 ) (Code: 1790131139 )
+Backup Shortcut: an Anki add-on adds a shortcut for saving a backup file from the deck list on the main window.
+
+**Note: This add-on also works with Anki 2.1.**
+
+![Press Cmd/Ctrl+S or Select through the File menu](backup_key.png)
+
 ## [Japanese Help Launcher](https://ankiweb.net/shared/info/103383488) (Code: 103383488)
 Japanese Help Launcher: an Anki addon adds an menu item to launch Anki help document in Japanese.
 
 **Note: This add-on also works with Anki 2.1.**
 
 ![select through the help menu](ja_help.png)
-
 
 ## [Mature Tag](https://ankiweb.net/shared/info/17741639) (Code: 17741639)
 This Add-on automatically adds a tag on your mature notes after the review.
