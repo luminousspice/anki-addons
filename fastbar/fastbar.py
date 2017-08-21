@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Fastbar: an Anki 2.1 add-on adds a toolbar and toggle the sidebar
 # in the Card Browser of Anki 2.1.
-# Version: 0.0.1
+# Version: 0.0.2
 # GitHub: https://github.com/luminousspice/anki-addons/
 #
 # This add-on is based on a post at the Anki Support Forum from Damien Elmes.
