@@ -29,7 +29,7 @@ class Fastbar:
         tb.setIconSize(QtCore.QSize(16, 16))
         tb.setToolButtonStyle(3)
 
-        self.form.actionToggle_Sidebar.triggered.connect(self.toggleSidebar)
+        self.form.actionToggle_Sidebar.triggered.connect(lambda: self.sidebarDockWidget.toggleViewAction().trigger())
         self.form.actionToggle_Bury.triggered.connect(self.onBury)
         self.form.actionToggle_Fastbar.triggered.connect(lambda: tb.toggleViewAction().trigger())
 
@@ -92,14 +92,6 @@ class Fastbar:
         tb.addSeparator()
         self.addToolBar(tb)
 
-    def toggleSidebar(self):
-        "Toggle Sidebar visibility."
-        if self.sidebarDockWidget.isVisible():
-            self.sidebarDockWidget.setVisible(False)
-        else:
-            self.sidebarDockWidget.setVisible(True)
-            self.sidebarTree.setFocus()
-
     def isBuried(self):
         return not not (self.card and self.card.queue == -2)
 
@@ -140,9 +132,7 @@ class Fastbar:
         self.menu_Cards.addSeparator()
         self.menu_Cards.addAction(self.actionToggle_Bury)
 
-
 addHook("browser.setupMenus", Fastbar.addToolBar)
-Browser.toggleSidebar = Fastbar.toggleSidebar
 Browser.isBuried = Fastbar.isBuried
 Browser.onBury = Fastbar.onBury
 Browser._onBury = Fastbar._onBury
