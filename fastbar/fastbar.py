@@ -4,12 +4,17 @@
 # Version: 0.0.2
 # GitHub: https://github.com/luminousspice/anki-addons/
 #
-# This add-on is based on a post at the Anki Support Forum from Damien Elmes.
-# https://anki.tenderapp.com/discussions/beta-testing/675-anki-210-beta-10/page/1#comment_43200476
-#
-# Copyright: 2017 Damien Elmes <anki@ichi2.net>
 # Copyright: 2017 Luminous Spice <luminous.spice@gmail.com>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/copyleft/agpl.html
+#
+# Third party softwares used with Fastbar.
+# QtAwesome. Copyright 2015 The Spyder development team.
+# Released under the MIT License.
+# https://github.com/spyder-ide/qtawesome/blob/master/LICENSE
+# The Font Awesome is licensed under the SIL Open Font License.
+# Six. Copyright 2010-2015 Benjamin Peterson
+# Released under the MIT License.
+# https://bitbucket.org/gutworth/six/src/LICENSE
 
 from aqt.qt import *
 from PyQt5 import QtWidgets, QtCore
@@ -125,7 +130,7 @@ class Fastbar:
         self.actionToggle_Bury.setText(_("Toggle Bury"))
         self.actionToggle_Fastbar = QtWidgets.QAction(Dialog)
         self.actionToggle_Fastbar.setObjectName("toggleFastbar")
-        self.actionToggle_Fastbar.setText(_("Fastbar"))
+        self.actionToggle_Fastbar.setText(_("Toggle Fastbar"))
         self.menuJump.addSeparator()
         self.menuJump.addAction(self.actionToggle_Sidebar)
         self.menuJump.addAction(self.actionToggle_Fastbar)
