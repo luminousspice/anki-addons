@@ -22,116 +22,121 @@ from anki.hooks import addHook, wrap
 from . import qtawesome as qta
 from . import six
 
-def addToolBar(self):
-    tb = QToolBar("Toolbar")
-    tb.setObjectName("Toolbar")
-    tb.setIconSize(QtCore.QSize(16, 16))
-    tb.setToolButtonStyle(3)
+class Fastbar:
+    def addToolBar(self):
+        tb = QToolBar("Fastbar")
+        tb.setObjectName("Fastbar")
+        tb.setIconSize(QtCore.QSize(16, 16))
+        tb.setToolButtonStyle(3)
 
-    self.form.actionToggle_Sidebar.triggered.connect(self.toggleSidebar)
-    self.form.actionToggle_Bury.triggered.connect(self.onBury)
+        self.form.actionToggle_Sidebar.triggered.connect(self.toggleSidebar)
+        self.form.actionToggle_Bury.triggered.connect(self.onBury)
 
-    tb.addAction(self.form.actionToggle_Sidebar)
-    tb.addSeparator()
-    tb.addAction(self.form.actionAdd)
-    tb.addSeparator()
-    tb.addAction(self.form.action_Info)
-    tb.addSeparator()
-    tb.addAction(self.form.actionToggle_Mark)
-    tb.addSeparator()
-    tb.addAction(self.form.actionToggle_Suspend)
-    tb.addSeparator()
-    tb.addAction(self.form.actionToggle_Bury)
-    tb.addSeparator()
-    tb.addAction(self.form.actionChange_Deck)
-    tb.addSeparator()
-    tb.addAction(self.form.actionChangeModel)
-    tb.addSeparator()
-    tb.addAction(self.form.actionAdd_Tags)
-    tb.addSeparator()
-    tb.addAction(self.form.actionRemove_Tags)
-    tb.addSeparator()
-    tb.addAction(self.form.actionClear_Unused_Tags)
-    tb.addSeparator()
-    tb.addAction(self.form.actionDelete)
-    tb.addSeparator()
-    self.addToolBar(tb)
+        self.form.actionAdd.setText(_("Add Note"))
+        self.form.action_Info.setText(_("Card &Info"))
+        self.form.actionDelete.setText(_("Delete Note"))
 
-addHook("browser.setupMenus", addToolBar)
+        icon_sidebar = qta.icon('fa.exchange')
+        icon_add = qta.icon('fa.plus-square')
+        icon_info = qta.icon('fa.info-circle')
+        icon_mark = qta.icon('fa.star')
+        icon_suspend = qta.icon('fa.pause-circle')
+        icon_bury = qta.icon('fa.step-backward')
+        icon_deck = qta.icon('fa.inbox')
+        icon_note = qta.icon('fa.leanpub')
+        icon_tag = qta.icon('fa.tag')
+        icon_untag = qta.icon('fa.eraser')
+        icon_tag_unused = qta.icon('ei.remove-sign')
+        icon_delete = qta.icon('fa.trash-o')
+        self.form.actionAdd.setIcon(icon_add)
+        self.form.action_Info.setIcon(icon_info)
+        self.form.actionToggle_Mark.setIcon(icon_mark)
+        self.form.actionToggle_Suspend.setIcon(icon_suspend)
+        self.form.actionToggle_Sidebar.setIcon(icon_sidebar)
+        self.form.actionToggle_Bury.setIcon(icon_bury)
+        self.form.actionChange_Deck.setIcon(icon_deck)
+        self.form.actionChangeModel.setIcon(icon_note)
+        self.form.actionAdd_Tags.setIcon(icon_tag)
+        self.form.actionRemove_Tags.setIcon(icon_untag)
+        self.form.actionClear_Unused_Tags.setIcon(icon_tag_unused)
+        self.form.actionDelete.setIcon(icon_delete)
 
-def toggleSidebar(self):
-    "Toggle Sidebar visibility."
-    if self.sidebarDockWidget.isVisible():
-        self.sidebarDockWidget.setVisible(False)
-    else:
-        self.sidebarDockWidget.setVisible(True)
-        self.sidebarTree.setFocus()
+        tb.addAction(self.form.actionToggle_Sidebar)
+        tb.addSeparator()
+        tb.addAction(self.form.actionAdd)
+        tb.addSeparator()
+        tb.addAction(self.form.action_Info)
+        tb.addSeparator()
+        tb.addAction(self.form.actionToggle_Mark)
+        tb.addSeparator()
+        tb.addAction(self.form.actionToggle_Suspend)
+        tb.addSeparator()
+        tb.addAction(self.form.actionToggle_Bury)
+        tb.addSeparator()
+        tb.addAction(self.form.actionChange_Deck)
+        tb.addSeparator()
+        tb.addAction(self.form.actionChangeModel)
+        tb.addSeparator()
+        tb.addAction(self.form.actionAdd_Tags)
+        tb.addSeparator()
+        tb.addAction(self.form.actionRemove_Tags)
+        tb.addSeparator()
+        tb.addAction(self.form.actionClear_Unused_Tags)
+        tb.addSeparator()
+        tb.addAction(self.form.actionDelete)
+        tb.addSeparator()
+        self.addToolBar(tb)
 
-def isBuried(self):
-    return not not (self.card and self.card.queue == -2)
+    def toggleSidebar(self):
+        "Toggle Sidebar visibility."
+        if self.sidebarDockWidget.isVisible():
+            self.sidebarDockWidget.setVisible(False)
+        else:
+            self.sidebarDockWidget.setVisible(True)
+            self.sidebarTree.setFocus()
 
-def onBury(self):
-    self.editor.saveNow(self._onBury)
+    def isBuried(self):
+        return not not (self.card and self.card.queue == -2)
 
-def _onBury(self):
-    bur = not self.isBuried()
-    c = self.selectedCards()
-    if bur:
-        self.col.sched.buryCards(c)
-    else:
-        self.col.sched.unburiedCards(c)
-    self.model.reset()
-    self.mw.requireReset()
+    def onBury(self):
+        self.editor.saveNow(self._onBury)
 
-def unburiedCards(self, ids):
-    "Unburied cards."
-    self.col.log(ids)
-    self.col.db.execute(
-        "update cards set queue=type,mod=?,usn=? "
-        "where queue = -2 and id in "+ ids2str(ids),
-        intTime(), self.col.usn())
+    def _onBury(self):
+        bur = not self.isBuried()
+        c = self.selectedCards()
+        if bur:
+            self.col.sched.buryCards(c)
+        else:
+            self.col.sched.unburiedCards(c)
+        self.model.reset()
+        self.mw.requireReset()
 
-def setupUi(self, Dialog):
-    icon_sidebar = qta.icon('fa.exchange')
-    icon_add = qta.icon('fa.plus-square')
-    icon_info = qta.icon('fa.info-circle')
-    icon_mark = qta.icon('fa.star')
-    icon_suspend = qta.icon('fa.pause-circle')
-    icon_bury = qta.icon('fa.step-backward')
-    icon_deck = qta.icon('fa.inbox')
-    icon_note = qta.icon('fa.leanpub')
-    icon_tag = qta.icon('fa.tag')
-    icon_untag = qta.icon('fa.eraser')
-    icon_tag_unused = qta.icon('ei.remove-sign')
-    icon_delete = qta.icon('fa.trash-o')
-    self.actionAdd.setIcon(icon_add)
-    self.action_Info.setIcon(icon_info)
-    self.actionToggle_Mark.setIcon(icon_mark)
-    self.actionToggle_Suspend.setIcon(icon_suspend)
-    self.actionChange_Deck.setIcon(icon_deck)
-    self.actionChangeModel.setIcon(icon_note)
-    self.actionAdd_Tags.setIcon(icon_tag)
-    self.actionRemove_Tags.setIcon(icon_untag)
-    self.actionClear_Unused_Tags.setIcon(icon_tag_unused)
-    self.actionDelete.setIcon(icon_delete)
+    def unburiedCards(self, ids):
+        "Unburied cards."
+        self.col.log(ids)
+        self.col.db.execute(
+            "update cards set queue=type,mod=?,usn=? "
+            "where queue = -2 and id in "+ ids2str(ids),
+            intTime(), self.col.usn())
 
-    self.actionToggle_Sidebar = QtWidgets.QAction(Dialog)
-    self.actionToggle_Sidebar.setIcon(icon_sidebar)
-    self.actionToggle_Sidebar.setObjectName("toggleSidebar")
-    self.actionToggle_Sidebar.setText(_("Toggle Sidebar"))
-    self.actionToggle_Bury = QtWidgets.QAction(Dialog)
-    self.actionToggle_Bury.setText(_("Toggle Bury"))
-    self.actionToggle_Bury.setIcon(icon_bury)
-    self.actionToggle_Bury.setText(_("Toggle Bury"))
-    self.menuJump.addSeparator()
-    self.menuJump.addAction(self.actionToggle_Sidebar)
-    self.menu_Cards.addSeparator()
-    self.menu_Cards.addAction(self.actionToggle_Bury)
+    def setupUi(self, Dialog):
+        self.actionToggle_Sidebar = QtWidgets.QAction(Dialog)
+        self.actionToggle_Sidebar.setObjectName("toggleSidebar")
+        self.actionToggle_Sidebar.setText(_("Toggle Sidebar"))
+        self.actionToggle_Bury = QtWidgets.QAction(Dialog)
+        self.actionToggle_Bury.setText(_("Toggle Bury"))
+        self.actionToggle_Bury.setText(_("Toggle Bury"))
+        self.menuJump.addSeparator()
+        self.menuJump.addAction(self.actionToggle_Sidebar)
+        self.menu_Cards.addSeparator()
+        self.menu_Cards.addAction(self.actionToggle_Bury)
 
-Browser.toggleSidebar = toggleSidebar
-Browser.isBuried = isBuried
-Browser.onBury = onBury
-Browser._onBury = _onBury
-Scheduler.unburiedCards = unburiedCards
 
-Ui_Dialog.setupUi = wrap(Ui_Dialog.setupUi, setupUi)
+addHook("browser.setupMenus", Fastbar.addToolBar)
+Browser.toggleSidebar = Fastbar.toggleSidebar
+Browser.isBuried = Fastbar.isBuried
+Browser.onBury = Fastbar.onBury
+Browser._onBury = Fastbar._onBury
+Scheduler.unburiedCards = Fastbar.unburiedCards
+
+Ui_Dialog.setupUi = wrap(Ui_Dialog.setupUi, Fastbar.setupUi)
