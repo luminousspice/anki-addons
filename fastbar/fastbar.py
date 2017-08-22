@@ -48,7 +48,7 @@ class Fastbar:
         icon_note = qta.icon('fa.leanpub')
         icon_tag = qta.icon('fa.tag')
         icon_untag = qta.icon('fa.eraser')
-        icon_tag_unused = qta.icon('ei.remove-sign')
+        icon_tag_unused = qta.icon('fa.magic')
         icon_delete = qta.icon('fa.trash-o')
         self.form.actionToggle_Fastbar.setIcon(icon_fastbar)
         self.form.actionToggle_Sidebar.setIcon(icon_sidebar)
