@@ -21,11 +21,11 @@ import hashlib
 import warnings
 
 # Third party imports
-from qtpy.QtCore import QObject, QPoint, QRect, qRound, Qt
-from qtpy.QtGui import (QColor, QFont, QFontDatabase, QIcon, QIconEngine,
+from PyQt5.QtCore import QObject, QPoint, QRect, qRound, Qt
+from PyQt5.QtGui import (QColor, QFont, QFontDatabase, QIcon, QIconEngine,
                         QPainter, QPixmap)
-from qtpy.QtWidgets import QApplication
-from six import unichr
+from PyQt5.QtWidgets import QApplication
+from ..six import unichr
 
 
 # Linux packagers, please set this to True if you want to make qtawesome
@@ -86,7 +86,7 @@ class CharIconPainter:
                 QIcon.Active: (options['color_on_active'],
                                options['on_active']),
                 QIcon.Selected: (options['color_on_selected'],
-                                 options['on_selected']) 
+                                 options['on_selected'])
             },
 
             QIcon.Off: {
@@ -96,7 +96,7 @@ class CharIconPainter:
                 QIcon.Active: (options['color_off_active'],
                                options['off_active']),
                 QIcon.Selected: (options['color_off_selected'],
-                                 options['off_selected']) 
+                                 options['off_selected'])
             }
         }
 
