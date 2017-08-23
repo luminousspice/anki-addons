@@ -18,7 +18,7 @@ Ease Factor Histogram: an Anki addon appends a histogram of Ease Factor on the s
 
 **Note: This add-on also works with Anki 2.1.**
 
-![Ease Factor Histogram](ease-factor-hard-en.png)
+![Ease Factor Histogram](screenshots/ease-factor-hard-en.png)
 
 For more details: [Ease Factor Histogram 単語帳の健全性を診断するアドオン](http://rs.luminousspice.com/addon-ease-factor-histogram/)
 
@@ -34,7 +34,7 @@ Backup Key: an Anki add-on adds a shortcut for saving a backup file from the dec
 
 **Note: This add-on also works with Anki 2.1.**
 
-![Press Cmd/Ctrl+S or Select through the File menu](backup_key.png)
+![Press Cmd/Ctrl+S or Select through the File menu](screenshots/backup_key.png)
 
 ## [Toggle Bury](https://ankiweb.net/shared/info/1039419543) (Code: 1039419543)
 Toggle Bury: an Anki add-on adds a toggle button to bury cards in the Card Browser.
@@ -60,7 +60,7 @@ Japanese Help Launcher: an Anki addon adds an menu item to launch Anki help docu
 
 **Note: This add-on also works with Anki 2.1.**
 
-![select through the help menu](ja_help.png)
+![select through the help menu](screenshots/ja_help.png)
 
 ## [Mature Tag](https://ankiweb.net/shared/info/17741639) (Code: 17741639)
 This Add-on automatically adds a tag on your mature notes after the review.
@@ -81,5 +81,5 @@ Find Matures: an Anki addon adds a tag to find mature cards on the left pane of 
 
 **Note: This add-on will not work with Anki 2.1 after beta 11.**
 
-![mature tag in the pane](mature.png)
+![mature tag in the pane](screenshots/mature.png)
 
