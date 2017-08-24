@@ -5,10 +5,6 @@
 #
 # Copyright: 2016-2017 Luminous Spice <luminous.spice@gmail.com>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/copyleft/agpl.html
-#
-# Third party software used with Feed to Anki.
-# Httplib2. Copyright (c) 2006 by Joe Gregorio. Released under the MIT License.
-# https://github.com/httplib2/httplib2/blob/master/LICENSE
 
 ##### Feeds info (URL, deck, tags) #####
 feeds_info = [
@@ -21,16 +17,33 @@ feeds_info = [
 ]
 ########################################
 
+import requests
+
 from aqt import mw, utils
 from aqt.qt import *
 from anki.lang import ngettext
 from bs4 import BeautifulSoup
 
-import feed_to_anki.httplib2 as httplib2
-
 
 MODEL = u"Feed_to_Anki"
 target_fields = [u"Front", u"Back"]
+
+
+def getFeed(url):
+    data = ""
+    errmsg = ""
+    try:
+        r=requests.get(url)
+        data =r.text
+    except requests.ConnectionError as e:
+        errmsg = u"Failed to reach the server." + str(e) + "\n"
+    except requests.HTTPError as e:
+        errmsg = u"The server couldn\'t fulfill the request." + str(e) + "\n"
+    else:
+        if not str(r.status_code) in ("200", "304"):
+            errmsg = "The server couldn\'t return the file." + " Code: " + str( r.status_code) + "\n"
+    finally:
+        return [data, errmsg]
 
 
 def addFeedModel(col):
@@ -87,19 +100,9 @@ def buildCard(**kw):
     mw.col.models.save(model)
 
     # retrieve rss
-    try:
-        h = httplib2.Http(".cache")
-        (resp, data) = h.request(kw['URL'], "GET")
-    except httplib2.ServerNotFoundError as e:
-        errmsg = u"Failed to reach the server." + str(e) + "\n"
+    data, errmsg = getFeed(kw['URL'])
+    if errmsg:
         return errmsg
-    except httplib2.HttpLib2Error as e:
-        errmsg = u"The server couldn\'t fulfill the request." + str(e) + "\n"
-        return errmsg
-    else:
-        if not str(resp.status) in ("200", "304"):
-            errmsg = "The server couldn\'t return the file." + u" Code: " + str(resp.status) + "\n"
-            return errmsg
 
     #parse xml
     doc = BeautifulSoup(data, "html.parser")
