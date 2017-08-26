@@ -51,7 +51,7 @@ Frozen Card: an Anki add-on adds a deck option to deactivate Anki algorithm to k
 ## [Fastbar](https://ankiweb.net/shared/info/1955978390) (Code: 1955978390)
 Fastbar: an Anki 2.1 add-on adds a Toolbar and toggle the Sidebar in the Card Browser of Anki 2.1 beta.
 
-**Note: This add-on also works with Anki 2.1 (after Beta 12). This is a  preliminary version because it's possible not to work due to any changes of Anki 2.1 Beta in future.**
+**Note: This add-on only works with Anki 2.1 (after Beta 12). This is a  preliminary version because it's possible not to work due to any changes of Anki 2.1 Beta in future.**
 
 ![Farstbar adds a toolbar to the Card Browser](screenshots/fastbar.png)
 
