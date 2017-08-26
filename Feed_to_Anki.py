@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Feed to Anki: an Anki addon makes a RSS (or Atom) Feed into Anki cards.
-# Version: 0.4.0
+# Version: 0.4.1
 # GitHub: https://github.com/luminousspice/anki-addons/
 #
 # Copyright: 2016-2017 Luminous Spice <luminous.spice@gmail.com>
