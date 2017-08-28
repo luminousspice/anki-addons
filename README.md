@@ -22,7 +22,7 @@ Ease Factor Histogram: an Anki addon appends a histogram of Ease Factor on the s
 
 For more details: [Ease Factor Histogram 単語帳の健全性を診断するアドオン](http://rs.luminousspice.com/addon-ease-factor-histogram/)
 
-## Feed to Anki [for 2.0](https://ankiweb.net/shared/info/1895937979) (Code: 1895937979), [for 2.1](https://ankiweb.net/shared/info/655089895) (Code: 655089895)
+## [Feed to Anki](https://ankiweb.net/shared/info/1895937979) (Code: 1895937979)
 Feed to Anki: an Anki addon makes a RSS (or Atom) Feed into Anki cards.
 
 **Note: This add-on also works with Anki 2.1.**
