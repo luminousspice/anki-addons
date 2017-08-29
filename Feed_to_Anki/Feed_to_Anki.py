@@ -34,6 +34,13 @@ if config:
     feeds_info = config['feeds_info']
     MODEL = config['model']
     target_fields = config['target_fields']
+else:
+    msg = """
+Feed to Anki:
+The add-on missed the configuration file.
+If you would not get the right feeds,
+please reinstall this add-on."""
+    utils.showWarning(msg)
 
 
 def getFeed(url):
