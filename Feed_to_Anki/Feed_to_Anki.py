@@ -50,9 +50,9 @@ def getFeed(url):
         r=requests.get(url)
         data =r.text
     except requests.ConnectionError as e:
-        errmsg = u"Failed to reach the server." + str(e) + "\n"
+        errmsg = "Failed to reach the server." + str(e) + "\n"
     except requests.HTTPError as e:
-        errmsg = u"The server couldn\'t fulfill the request." + str(e) + "\n"
+        errmsg = "The server couldn\'t fulfill the request." + str(e) + "\n"
     else:
         if not str(r.status_code) in ("200", "304"):
             errmsg = "The server couldn\'t return the file." + " Code: " + str( r.status_code) + "\n"
@@ -67,7 +67,7 @@ def addFeedModel(col):
     for f in target_fields:
         fm = mm.newField(f)
         mm.addField(m, fm)
-    t = mm.newTemplate(u"Card 1")
+    t = mm.newTemplate("Card 1")
     t['qfmt'] = "{{"+target_fields[0]+"}}"
     t['afmt'] = "{{FrontSide}}\n\n<hr id=answer>\n\n"+"{{"+target_fields[1]+"}}"
     mm.addTemplate(m, t)
