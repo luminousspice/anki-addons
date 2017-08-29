@@ -8,12 +8,12 @@
 
 ##### Feeds info (URL, deck, tags) #####
 feeds_info = [
-    {"URL": "http://www.merriam-webster.com/wotd/feed/rss2",
-     "DECK": u"Word of the Day::Merriam-Webster",
-     "tags": [u"wotd", u"MW"]},
-    {"URL": "http://feeds.feedburner.com/OAAD-WordOfTheDay?format=xml",
-     "DECK": u"Word of the Day::Oxford",
-     "tags": [u"wotd", u"OAAD"]},
+    {"URL": "https://www.merriam-webster.com/wotd/feed/rss2",
+     "DECK": "Word of the Day::Merriam-Webster",
+     "tags": ["wotd", "MW"]},
+    {"URL": "https://feeds.feedburner.com/OAAD-WordOfTheDay?format=xml",
+     "DECK": "Word of the Day::Oxford",
+     "tags": ["wotd", "OAAD"]},
 ]
 ########################################
 
@@ -25,8 +25,15 @@ from anki.lang import ngettext
 from bs4 import BeautifulSoup
 
 
-MODEL = u"Feed_to_Anki"
-target_fields = [u"Front", u"Back"]
+MODEL = "Feed_to_Anki"
+target_fields = ["Front", "Back"]
+
+
+config = mw.addonManager.getConfig(__name__)
+if config:
+    feeds_info = config['feeds_info']
+    MODEL = config['model']
+    target_fields = config['target_fields']
 
 
 def getFeed(url):
