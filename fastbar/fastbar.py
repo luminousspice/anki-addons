@@ -31,7 +31,7 @@ class Fastbar:
     def addToolBar(self):
         tb = QToolBar("Fastbar")
         tb.setObjectName("Fastbar")
-        tb.setIconSize(QtCore.QSize(16, 16))
+        tb.setIconSize(QtCore.QSize(20, 20))
         tb.setToolButtonStyle(3)
 
         self.form.actionToggle_Sidebar.triggered.connect(lambda: self.sidebarDockWidget.toggleViewAction().trigger())
