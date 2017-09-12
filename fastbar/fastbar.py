@@ -38,8 +38,6 @@ class Fastbar:
         self.form.actionToggle_Bury.triggered.connect(self.onBury)
         self.form.actionToggle_Fastbar.triggered.connect(lambda: tb.toggleViewAction().trigger())
 
-        self.form.actionAdd.setText(_("Add Note"))
-        self.form.action_Info.setText(_("Card &Info"))
         self.form.actionDelete.setText(_("Delete Note"))
 
         icon_fastbar = qta.icon('ei.remove-sign')
