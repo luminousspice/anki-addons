@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 # Straight Reward:
-# an Anki addon increases Ease Factor at every 5 straight success.
+# an Anki addon increases Ease Factor at every 5 straight success
+# ("Good" rating in review).
 # Version: 0.0.1
 # GitHub: https://github.com/luminousspice/anki-addons/
 #
 # Copyright: 2019 Luminous Spice <luminous.spice@gmail.com>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/copyleft/agpl.html
-
-import time
-import random
-from heapq import heappush
 
 try:
     from PyQt5 import QtWidgets
@@ -23,7 +20,12 @@ from anki.hooks import wrap
 from aqt.utils import tooltip
 
 
+# Reward at every 5 strait success
 STRAIT = 5
+# Increase +15% to Ease Factor as reward
+REWARD = 150
+# Praise with the reward.
+PRAISE = " Straight Success! <br>Ease Factor gained a %d %% : " %(REWARD/10)
 
 
 def rescheduleRevReward(self, card, ease):
@@ -32,8 +34,8 @@ def rescheduleRevReward(self, card, ease):
     if dconf.get('straitReward'):
         count = checkStrait(self, card, ease)
         if ease == 3 and count > 0 and count % STRAIT == STRAIT - 1:
-            card.factor = max(1300, card.factor+150)
-            tooltip(str(STRAIT) + _(" strait success rewarded: Ease Factor + 15%"))
+            card.factor = max(1300, card.factor+REWARD)
+            tooltip(str(count+1) + PRAISE + str(card.factor/10))
 
 
 def checkStraight(self, card, conf):
@@ -43,7 +45,10 @@ select ease from revlog where cid = ? order by id desc
 """, card.id)
     if eases:
         strait = [i for i, x in enumerate(eases) if x <> 3]
-        return strait[0]
+        if strait:
+            return strait[0]
+        else:
+            return len(eases)
 
 
 def setupUi(self, Dialog):
@@ -52,8 +57,8 @@ def setupUi(self, Dialog):
         self.straightReward = QtWidgets.QCheckBox(self.tab_3)
     except NameError:
         self.straightReward = QtGui.QCheckBox(self.tab_3)
-    self.straightReward.setText(_("Activate Straight Reward Addon"))
-    self.gridLayout_3.addWidget(self.straightReward, 5, 0, 1, 3)
+    self.straightReward.setText(_("Straight Reward"))
+    self.gridLayout_3.addWidget(self.straightReward, 7, 0, 1, 3)
 
 
 def load_conf(self):
