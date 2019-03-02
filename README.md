@@ -1,6 +1,11 @@
 # Anki Add-ons
 
-Simple add-ons add some features to Anki.
+Simple add-ons would extend some features of Anki.
+
+## [Straight Reward](https://ankiweb.net/shared/info/1130426680) (Code: 1130426680)
+Straight Reward: an Anki addon adds 15(%) to Ease Factor at every 5 straight success ("Good" rating in review). 
+
+**Note: This add-on works with both Anki 2.0 and Anki 2.1. However, it's a preliminary release.**
 
 ## [Another Retreat](https://ankiweb.net/shared/info/1481634779) (Code: 1481634779)
 Another Retreat: an Anki addon sets the next interval at lapse to the last succeed interval.
