@@ -2,7 +2,7 @@
 # Straight Reward:
 # an Anki addon increases Ease Factor at every 5 straight success
 # ("Good" rating in review).
-# Version: 0.0.1
+# Version: 0.0.2
 # GitHub: https://github.com/luminousspice/anki-addons/
 #
 # Copyright: 2019 Luminous Spice <luminous.spice@gmail.com>
