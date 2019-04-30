@@ -4,7 +4,7 @@
 # Version: 0.1.2
 # GitHub: https://github.com/luminousspice/anki-addons/
 #
-# Copyright: 2016 Luminous Spice <luminous.spice@gmail.com>
+# Copyright: 2019 Luminous Spice <luminous.spice@gmail.com>
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/copyleft/agpl.html
 
 from collections import Counter
