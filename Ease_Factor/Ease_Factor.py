@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Ease Factor Histogram: an Anki addon appends a histogram of Ease Factor
 # on the stats screen.
-# Version: 0.1.1
+# Version: 0.1.2
 # GitHub: https://github.com/luminousspice/anki-addons/
 #
 # Copyright: 2016 Luminous Spice <luminous.spice@gmail.com>
@@ -10,6 +10,7 @@
 from collections import Counter
 from anki.stats import CollectionStats
 from anki.hooks import wrap
+from anki import version
 
 colCum = "rgba(0,0,0,0.9)"
 colFactor = "#07c"
@@ -36,13 +37,26 @@ def factorGraph(self):
                       _('''\
 Index from the evaluation history in reviews to decide the next interval.''')
                       )
-    txt += self._graph(id="factor", timeTicks=False, ylabel2=_("Percentage"), data=[
-        dict(data=factors, color=colFactor, bars=dict(barWidth=6)),
-        dict(data=totd, color=colCum, yaxis=2,
-         bars={'show': False}, lines=dict(show=True), stack=False)
-        ], conf=dict(
-            xaxis=dict(min=factormin-5, max=factormax+5),
-            yaxes=[dict(min=0), dict(position="right",min=0, max=105)]))
+    if version < '2.1.12':
+        txt += self._graph(id="factor", timeTicks=False, ylabel2=_("Percentage"), data=[
+            dict(data=factors, color=colFactor, bars=dict(barWidth=6)),
+            dict(data=totd, color=colCum, yaxis=2,
+             bars={'show': False}, lines=dict(show=True), stack=False)
+            ], conf=dict(
+                xaxis=dict(min=factormin-5, max=factormax+5),
+                yaxes=[dict(min=0), dict(position="right",min=0, max=105)]))
+    else:
+        txt += self._graph(id="factor", ylabel2=_("Percentage"), data=[
+            dict(data=factors, color=colFactor, bars=dict(barWidth=6)),
+            dict(data=totd, color=colCum, yaxis=2,
+             bars={'show': False}, lines=dict(show=True), stack=False)
+            ], conf=dict(
+                xaxis=dict(min=factormin-5, max=factormax+5,
+                 ticks=[
+                     [factormin, _(factormin)],
+                     [190, _("190")], [250, _("250")], [310, _("310")]]
+                 ),
+                yaxes=[dict(min=0), dict(position="right",min=0, max=105)]))
     i = []
     if low:
         self._line(i, _("Lowest ease"), "%d%%" % low)
